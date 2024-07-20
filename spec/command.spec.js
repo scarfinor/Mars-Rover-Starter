@@ -14,4 +14,8 @@ describe("Command class", function () {
   });
 
   // Test 2
+  test("constructor sets command type", function () {});
+
+  // Test 3
+  test("constructor sets a value passed in as the 2nd argument", function () {});
 });
