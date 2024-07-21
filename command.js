@@ -1,3 +1,4 @@
+// Command Class Initialized
 class Command {
   constructor(commandType, value) {
     this.commandType = commandType;
@@ -7,11 +8,10 @@ class Command {
     this.value = value;
   }
 }
-// Initialize Command Type
+
+// Properties Of Command Class From Message.js
 //let modeCommand = new Command("MODE_CHANGE", "LOW_POWER");
 //let moveCommand = new Command("MOVE", 12000);
 //let STATUS_CHECK = new Command();
-
-//Test
 
 module.exports = Command;
