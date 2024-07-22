@@ -6,15 +6,9 @@ class Message {
     if (!name) {
       throw Error("Name required.");
     }
+    this.name = name;
+    this.commands = commands;
   }
 }
 
-// Properties Initialized For Command Class
-//let name1 = new Message("name");
-/*let commands = [
-  new Command("MODE_CHANGE", "LOW_POWER"),
-  new Command("STATUS_CHECK"),
-];*/
-//console.log(name1);
-//let message = new Message("Test message with two commands", commands);
 module.exports = Message;

@@ -9,9 +9,4 @@ class Command {
   }
 }
 
-// Properties Of Command Class From Message.js
-//let modeCommand = new Command("MODE_CHANGE", "LOW_POWER");
-//let moveCommand = new Command("MOVE", 12000);
-//let STATUS_CHECK = new Command();
-
 module.exports = Command;

@@ -4,6 +4,13 @@ const Command = require("../command.js");
 //       However, do NOT edit the grading tests for any reason and make sure to un-comment out your code to get the autograder to pass.
 
 describe("Command class", function () {
+  const commandType = [
+    new Command("MODE_CHANGE"),
+    new Command("MOVE", 12000),
+    new Command("STATUS_CHECK"),
+  ];
+  const value = "LOW_POWER";
+  const command = new Command(commandType, value);
   let instantiateCommand = function () {
     new Command();
   };
@@ -14,8 +21,12 @@ describe("Command class", function () {
   });
 
   // Test 2
-  test("constructor sets command type", function () {});
+  test("constructor sets command type", function () {
+    expect(command.commandType).toEqual(commandType);
+  });
 
   // Test 3
-  test("constructor sets a value passed in as the 2nd argument", function () {});
+  test("constructor sets a value passed in as the 2nd argument", function () {
+    expect(command.value).toEqual(value);
+  });
 });
