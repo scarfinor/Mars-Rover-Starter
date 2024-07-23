@@ -8,5 +8,8 @@ class Command {
     this.value = value;
   }
 }
-
+const commands = [
+  new Command("MODE_CHANGE", "LOW_POWER"),
+  new Command("STATUS_CHECK"),
+];
 module.exports = Command;
