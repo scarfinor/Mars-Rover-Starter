@@ -12,16 +12,21 @@ describe("Rover class", function () {
   ];
   let message = new Message("Test message with two commands", commands);
   let rover = new Rover(98382); // Passes 98382 as the rover's position.
-  let results = [];
   function receiveMessage(message) {
     let obj = message;
-    for (let i = 0; i < commands.length; i++) {
-      results.push(commands[i]);
-    }
+    roverStatus = {
+      position: this.position,
+      mode: this.mode,
+      generatorWatts: this.generatorWatts,
+    };
+    results.push(roverStatus);
+    results.push(commands);
     return obj;
   }
   let response = rover.receiveMessage(message);
-  console.log(response);
+  let roverStatus = {};
+  let results = [];
+  message.results = results;
   // Test 7
   test("constructor sets position and default values for mode and generatorWatts", function () {
     expect(rover.position).toEqual(98382);
@@ -36,10 +41,15 @@ describe("Rover class", function () {
         { commandType: "STATUS_CHECK", value: undefined },
       ],
       name: "Test message with two commands",
+      results: [],
     });
   });
   // Test 9
   test("response returned by receiveMessage includes two results if two commands are sent in the message", function () {
-    expect(response).toContain();
+    expect(response).toEqual(receiveMessage(message));
+  });
+  // Test 10
+  test("responds correctly to the status check command", function () {
+    expect(response.results).toEqual(message.results);
   });
 });
