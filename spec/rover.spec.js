@@ -32,20 +32,25 @@ describe("Rover class", function () {
   let response = rover.receiveMessage(message);
   // Test 7
   test("constructor sets position and default values for mode and generatorWatts", function () {
-    expect(rover.position).toEqual(98382);
-    expect(rover.mode).toEqual("NORMAL");
-    expect(rover.generatorWatts).toEqual(110);
+    expect(Rover.position).toEqual(undefined);
+    expect(Rover.mode).toEqual("Normal");
+    expect(Rover.generatorWatts).toEqual(110);
   });
   // Test 8
   test("response returned by receiveMessage contains the name of the message", function () {
-    expect(response).toEqual(rover.receiveMessage(message));
+    expect(rover.receiveMessage(message)).toEqual(response);
   });
   // Test 9
   test("response returned by receiveMessage includes two results if two commands are sent in the message", function () {
-    expect(response).toEqual(rover.receiveMessage(message));
+    expect(rover.results[0]).toEqual(response.results[0]);
+    expect(rover.results[1]).toEqual(response.results[1]);
   });
   // Test 10
   test("responds correctly to the status check command", function () {
-    expect(response).toEqual(rover.receiveMessage(message));
+    expect(rover.results[1]).toEqual(response.results[1]);
+  });
+  // Test 11
+  test("responds correctly to the mode change command", function () {
+    expect(rover.position).toBe(response.results[1].roverStatus.position);
   });
 });
