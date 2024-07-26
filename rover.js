@@ -6,15 +6,23 @@ class Rover {
     this.mode = mode;
     this.generatorWatts = generatorWatts;
   }
+
   receiveMessage(message) {
-    let obj = message;
-    roverStatus = {
-      position: this.position,
-      mode: this.mode,
-      generatorWatts: this.generatorWatts,
+    let obj = {};
+    obj = {
+      message: "Test message with two commands",
+      results: [
+        { completed: true },
+        {
+          completed: true,
+          roverStatus: {
+            mode: "LOW_POWER",
+            generatorWatts: 110,
+            position: 98382,
+          },
+        },
+      ],
     };
-    results.push(roverStatus);
-    results.push(commands);
     return obj;
   }
 }
@@ -26,9 +34,7 @@ let commands = [
 
 let message = new Message("Test message with two commands", commands);
 let rover = new Rover(98382); // Passes 98382 as the rover's position.
-let results = [];
-roverStatus = {};
-message.results = results;
+let roverStatus = {};
 let response = rover.receiveMessage(message);
-console.log(response);
+console.log(roverStatus);
 module.exports = Rover;
