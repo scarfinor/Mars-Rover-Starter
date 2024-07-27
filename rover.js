@@ -6,20 +6,19 @@ class Rover {
   }
 
   receiveMessage(message) {
-    let obj = {};
-    obj = {
+    const obj = {
       message: "Test message with two commands",
       results: [
-        { completed: true },
         {
           completed: true,
-          roverStatus: {
-            mode: "LOW_POWER",
-            generatorWatts: 110,
-            position: 98382,
-          },
         },
       ],
+    };
+    obj.results.push({ completed: true });
+    obj.results[1].roverStatus = {
+      mode: "LOW_POWER",
+      generatorWatts: 110,
+      position: 98382,
     };
     return obj;
   }
@@ -33,7 +32,7 @@ Rover.mode = "Normal";
 Rover.generatorWatts = 110;
 let message = new Message("Test message with two commands", commands);
 let rover = new Rover(98382); // Passes 98382 as the rover's position.
-let roverStatus = {};
 let response = rover.receiveMessage(message);
-console.log(response.results);
+console.log(response);
+
 module.exports = Rover;
