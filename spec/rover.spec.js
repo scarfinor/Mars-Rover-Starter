@@ -21,18 +21,19 @@ describe("Rover class", function () {
   let rover = new Rover(98382); // Passes 98382 as the rover's position.
 
   let response = rover.receiveMessage(message);
-  let STATUS_CHECK = rover.receiveMessage(message).results[1];
+  let STATUS_CHECK = response.results[1];
   Command.STATUS_CHECK = STATUS_CHECK;
-  let MODE_CHANGE = rover.receiveMessage(message).results[1].completed;
-  let MOVE = rover.receiveMessage(message).results[0];
+  let MODE_CHANGE = response.results[1].completed;
+  let MOVE = response.results[0];
   let restrictions = "LOW_POWER: " + "Cant be moved in this state.";
 
   if (response.results[1].roverStatus.mode === "LOW_POWER") {
-    response.results[1].completed = false;
+    (MOVE = false), +response.results[1].roverStatus;
     console.log(restrictions);
   }
   if (response.results[1].roverStatus.mode === "NORMAL") {
-    response.results[1].roverStatus.completed = true;
+    (response.results[1].roverStatus.completed = true),
+      +response.results[1].roverStatus;
   }
   // Test 7
   test("constructor sets position and default values for mode and generatorWatts", function () {
@@ -63,4 +64,5 @@ describe("Rover class", function () {
   test("responds with a false completed value when attempting to move in LOW_POWER mode", function () {
     expect(MOVE).toEqual(false);
   });
+  // Test 13
 });

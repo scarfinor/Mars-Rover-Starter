@@ -43,22 +43,20 @@ let response = rover.receiveMessage(message);
 
 console.log(response);
 
-let STATUS_CHECK = rover.receiveMessage(message).results[1];
+let STATUS_CHECK = response.results[1];
 Command.STATUS_CHECK = STATUS_CHECK;
-let MODE_CHANGE = rover.receiveMessage(message).results[1].completed;
-let MOVE = rover.receiveMessage(message).results[0];
+let MODE_CHANGE = response.results[1].completed;
+let MOVE = response.results[0];
 let restrictions = "LOW_POWER: " + "Cant be moved in this state.";
 
 if (response.results[1].roverStatus.mode === "LOW_POWER") {
-  response.results[1].completed = false, roverStatus: {
-    mode: "LOW_POWER",
-    generatorWatts: 110,
-    position: 98382,
-  }
-  console.log(restrictions);
+  (MOVE = false), +response.results[1].roverStatus;
 }
+console.log(restrictions);
+
 if (response.results[1].roverStatus.mode === "NORMAL") {
-  response.results[1].roverStatus.completed = true;
+  (response.results[1].roverStatus.completed = true),
+    +response.results[1].roverStatus;
 }
 console.log(rover.receiveMessage(message).results[1]);
 console.log(Command.STATUS_CHECK);

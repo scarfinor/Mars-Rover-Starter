@@ -11,7 +11,6 @@ describe("Message class", function () {
       new Command("MODE_CHANGE", "LOW_POWER"),
       new Command("STATUS_CHECK"),
     ];
-    let message = new Message("Test message with two commands", commands);
   };
   // Test 4
   test("throws error if a name is NOT passed into the constructor as the first parameter", function () {
