@@ -12,8 +12,7 @@ describe("Command class", function () {
   modeCommand.commandType = "MODE_CHANGE";
   modeCommand.value = "LOW_POWER";
   moveCommand.commandType = "MOVE";
-  moveCommand.commandType = 12000;
-  console.log(Command.modeCommand.commandType);
+  moveCommand.value = 12000;
 
   // Test 1
   test("throws error if command type is NOT passed into constructor as the first parameter", function () {
@@ -22,12 +21,13 @@ describe("Command class", function () {
 
   // Test 2
   test("constructor sets command type", function () {
-    expect(Command.modeCommand.commandType).toEqual("MODE_CHANGE");
-    expect(Command.moveCommand.commandType).toEqual("MOVE");
+    expect(modeCommand.commandType).toEqual("MODE_CHANGE");
+    expect(moveCommand.commandType).toEqual("MOVE");
   });
 
   // Test 3
   test("constructor sets a value passed in as the 2nd argument", function () {
-    expect(Command.value).toEqual();
+    expect(modeCommand.value).toEqual("LOW_POWER");
+    expect(moveCommand.value).toEqual(12000);
   });
 });
