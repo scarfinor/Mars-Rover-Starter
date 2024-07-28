@@ -11,5 +11,8 @@ class Command {
 
 let modeCommand = new Command("MODE_CHANGE", "LOW_POWER");
 let moveCommand = new Command("MOVE", 12000);
-
+modeCommand.commandType = "MODE_CHANGE";
+modeCommand.value = "LOW_POWER";
+moveCommand.commandType = "MOVE";
+moveCommand.commandType = 12000;
 module.exports = Command;
