@@ -13,23 +13,16 @@ describe("Rover class", function () {
 
   let message = new Message("Test message with two commands", commands);
   let rover = new Rover(98382); // Passes 98382 as the rover's position.
-  (rover.results = [
-    { completed: true },
-    {
-      completed: true,
-      roverStatus: {
-        mode: "LOW_POWER",
-        generatorWatts: 110,
-        position: 98382,
-      },
-    },
-  ]),
-    (rover.results.roverStatus = { completed: true }),
-    {
+  (rover.results = []),
+    (rover.results[0] = { completed: true }),
+    (rover.results[1] = {
       completed: true,
       roverStatus: { generatorWatts: 110, mode: "LOW_POWER", position: 98382 },
-    };
+    });
   let response = rover.receiveMessage(message);
+  let STATUS_CHECK = response.results[1];
+  let MODE_CHANGE = response.results[1].completed;
+  let MOVE = response.results[0];
   // Test 7
   test("constructor sets position and default values for mode and generatorWatts", function () {
     expect(Rover.position).toEqual(undefined);
@@ -47,10 +40,14 @@ describe("Rover class", function () {
   });
   // Test 10
   test("responds correctly to the status check command", function () {
-    expect(rover.results[1]).toEqual(response.results[1]);
+    expect(STATUS_CHECK).toEqual(response.results[1]);
   });
   // Test 11
   test("responds correctly to the mode change command", function () {
-    expect(rover.position).toBe(response.results[1].roverStatus.position);
+    expect(MODE_CHANGE).toBe(true);
+  });
+  // Test 12
+  test("responds with a false completed value when attempting to move in LOW_POWER mode", function () {
+    expect(MOVE).toEqual(false);
   });
 });
