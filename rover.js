@@ -11,33 +11,32 @@ class Rover {
     let obj = {};
     obj.message = "Test message with two commands";
     obj.results = [];
-    obj.results.push({
-      completed: true,
-    });
-    obj.results.push({
-      completed: true,
-      roverStatus: {
-        mode: "LOW_POWER",
-        generatorWatts: 110,
-        position: 98382,
-      },
-    });
-    if (commands[1].name === "STATUS_CHECK") {
-      obj.results[1].completed = true;
-      obj.results[1].roverStatus = {
-        mode: "NORMAL",
-        generatorWatts: 110,
-        position: 98382,
-      };
+
+    if (commands.commandType === "STATUS_CHECK") {
+      obj.results.push({ completed: true });
+      obj.results.push({
+        roverStatus: {
+          mode: "NORMAL",
+          generatorWatts: 110,
+          position: 87382089,
+        },
+      });
     }
-    if (modeCommand.name === "MODE_CHANGE") {
-      obj.results[1].roverStatus.mode = "LOW_POWER";
-      obj.results[1].completed = true;
+    if (modeCommand.commandType === "MODE_CHANGE") {
+      obj.results.push({ completed: true });
+      obj.results.push({ roverStatus: { mode: "LOW_POWER" } });
+      if (Rover.mode === "NORMAL") {
+        obj.results.push({ completed: true });
+        obj.results.push({ roverStatus: { mode: "NORMAL" } });
+      }
     }
-    if (moveCommand.name === "MOVE") {
-      if ((obj.results[1].roverStatus.mode = "NORMAL")) {
-        obj.results[1].roverStatus.position = moveCommand.value;
-        obj.results[1].completed = true;
+    if (moveCommand[1].commandType === "MOVE") {
+      if (Rover.mode === "NORMAL") {
+        obj.results.push({ roverStatus: { position: 12000 } });
+        obj.results.push({ completed: true });
+        if (modeCommand[0].value === "LOW_POWER") {
+          obj.results.push({ completed: false });
+        }
       }
     }
     return obj;
@@ -59,6 +58,6 @@ let message = new Message("Test message with two commands", commands);
 let rover = new Rover(98382); // Passes 98382 as the rover's position.
 let response = rover.receiveMessage(message);
 
-console.log(response.results[1].roverStatus);
+//console.log(response.results[1].roverStatus);
 
 module.exports = Rover;

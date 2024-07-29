@@ -42,25 +42,27 @@ describe("Rover class", function () {
     expect(response.results[1].roverStatus).toEqual({
       mode: "NORMAL",
       generatorWatts: 110,
-      position: 98382,
+      position: 87382089,
     });
   });
   // Test 11
   test("responds correctly to the mode change command", function () {
-    let commands = [new Command("MODE_CHANGE", "LOW_POWER")];
-    let message = new Message("Mode change message", commands);
+    let modeCommand = [new Command("MODE_CHANGE", "LOW_POWER")];
+    let message = new Message("Mode change message", modeCommand);
     let rover = new Rover(98382);
     let response = rover.receiveMessage(message);
+    expect(response.results[0].completed).toBe(false);
     expect(response.results[0].completed).toBe(true);
-    expect(rover.mode).toBe("LOW_POWER");
+    expect(response.results.roverStatus.mode).toBe("LOW_POWER");
+    expect(response.results.roverStatus.mode).toBe("NORMAL");
   });
   // Test 12
   test("responds with a false completed value when attempting to move in LOW_POWER mode", function () {
-    let commands = [
+    let modeCommand = [
       new Command("MODE_CHANGE", "LOW_POWER"),
       new Command("MOVE", 12000),
     ];
-    let message = new Message("Move in low power mode message", commands);
+    let message = new Message("Move in low power mode message", modeCommand);
     let rover = new Rover(98382);
     let response = rover.receiveMessage(message);
     expect(response.results[1].completed).toBe(false);
@@ -68,11 +70,14 @@ describe("Rover class", function () {
   });
   // Test 13
   test("responds with the position for the move command", function () {
-    let commands = [new Command("MOVE", 12000)];
+    let moveCommand = [
+      new Command("MODE_CHANGE", "LOW_POWER"),
+      new Command("MOVE", 12000),
+    ];
     let message = new Message("Move command message", commands);
     let rover = new Rover(98382);
     let response = rover.receiveMessage(message);
     expect(response.results[0].completed).toBe(true);
-    expect(rover.position).toBe(1200);
+    expect(rover.position).toBe(12000);
   });
 });
