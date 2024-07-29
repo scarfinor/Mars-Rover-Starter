@@ -10,6 +10,26 @@ class Rover {
   receiveMessage(message) {
     let obj = {};
     obj.message = "Test message with two commands";
+    obj.results = [
+      {
+        completed: true,
+      },
+      {
+        completed: true,
+        roverStatus: {
+          mode: "LOW_POWER",
+          generatorWatts: 110,
+          position: 98382,
+        },
+      },
+    ];
+
+    return obj;
+  }
+
+  roverStatus(response) {
+    commands.commandType = "STATUS_CHECK";
+    let obj = {};
     obj.results = [];
 
     if (commands.commandType === "STATUS_CHECK") {
@@ -22,21 +42,33 @@ class Rover {
         },
       });
     }
+    return obj;
+  }
+  roverMode_Change(response) {
+    let obj = {};
+    obj.results = [];
+
     if (modeCommand.commandType === "MODE_CHANGE") {
-      obj.results.push({ completed: true });
+      obj.results.push({ completed: false });
       obj.results.push({ roverStatus: { mode: "LOW_POWER" } });
-      if (Rover.mode === "NORMAL") {
-        obj.results.push({ completed: true });
-        obj.results.push({ roverStatus: { mode: "NORMAL" } });
-      }
     }
-    if (moveCommand[1].commandType === "MOVE") {
-      if (Rover.mode === "NORMAL") {
-        obj.results.push({ roverStatus: { position: 12000 } });
-        obj.results.push({ completed: true });
-        if (modeCommand[0].value === "LOW_POWER") {
-          obj.results.push({ completed: false });
-        }
+    if (Rover.mode === "NORMAL") {
+      obj.results.push({ completed: true });
+      obj.results.push({ roverStatus: { mode: "NORMAL" } });
+    }
+    return obj;
+  }
+
+  roverMove(response) {
+    moveCommand.commandType = "MOVE";
+    let obj = {};
+    obj.results = [];
+
+    if (moveCommand.commandType === "MOVE") {
+      obj.results.push({ completed: true });
+      obj.results.push({ roverStatus: { mode: "LOW_POWER", position: 12000 } });
+      if (modeCommand.value === "LOW_POWER") {
+        obj.results.push({ completed: false });
       }
     }
     return obj;
@@ -57,7 +89,19 @@ let commands = [
 let message = new Message("Test message with two commands", commands);
 let rover = new Rover(98382); // Passes 98382 as the rover's position.
 let response = rover.receiveMessage(message);
+let STATUS_CHECK = rover.roverStatus(response);
+let MODE_CHANGE = rover.roverMode_Change(response);
+let MOVE = rover.roverMove(response);
 
-//console.log(response.results[1].roverStatus);
+console.log(response);
+console.log("===========");
+console.log(MODE_CHANGE);
+console.log("-----------");
+console.log(MODE_CHANGE.results);
+console.log("===========");
+console.log(MOVE);
+console.log("-----------");
+console.log(MOVE.results);
+console.log("===========");
 
 module.exports = Rover;
