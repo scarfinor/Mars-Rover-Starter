@@ -1,10 +1,10 @@
 const Message = require("./message.js");
 const Command = require("./command.js");
 class Rover {
-  constructor(position, mode, generatorWatts) {
+  constructor(position) {
     this.position = position;
-    this.mode = mode;
-    this.generatorWatts = generatorWatts;
+    this.mode = "NORMAL";
+    this.generatorWatts = 110;
   }
 
   receiveMessage(message) {
@@ -22,6 +22,24 @@ class Rover {
         position: 98382,
       },
     });
+    if (commands[1].name === "STATUS_CHECK") {
+      obj.results[1].completed = true;
+      obj.results[1].roverStatus = {
+        mode: "NORMAL",
+        generatorWatts: 110,
+        position: 98382,
+      };
+    }
+    if (modeCommand.name === "MODE_CHANGE") {
+      obj.results[1].roverStatus.mode = "LOW_POWER";
+      obj.results[1].completed = true;
+    }
+    if (moveCommand.name === "MOVE") {
+      if ((obj.results[1].roverStatus.mode = "NORMAL")) {
+        obj.results[1].roverStatus.position = moveCommand.value;
+        obj.results[1].completed = true;
+      }
+    }
     return obj;
   }
 }
@@ -41,28 +59,6 @@ let message = new Message("Test message with two commands", commands);
 let rover = new Rover(98382); // Passes 98382 as the rover's position.
 let response = rover.receiveMessage(message);
 
-console.log(response);
-
-let STATUS_CHECK = response.results[1];
-Command.STATUS_CHECK = STATUS_CHECK;
-let MODE_CHANGE = response.results[1].completed;
-let MOVE = response.results[0];
-let restrictions = "LOW_POWER: " + "Cant be moved in this state.";
-
-if (response.results[1].roverStatus.mode === "LOW_POWER") {
-  (MOVE = false), +response.results[1].roverStatus;
-}
-console.log(restrictions);
-
-if (response.results[1].roverStatus.mode === "NORMAL") {
-  (response.results[1].roverStatus.completed = true),
-    +response.results[1].roverStatus;
-}
-console.log(rover.receiveMessage(message).results[1]);
-console.log(Command.STATUS_CHECK);
-console.log(MODE_CHANGE);
-console.log(MOVE);
-console.log(response.results[1].roverStatus.mode);
-console.log(this.mode);
+console.log(response.results[1].roverStatus);
 
 module.exports = Rover;

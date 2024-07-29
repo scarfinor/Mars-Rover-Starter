@@ -15,5 +15,5 @@ let commands = [
   new Command("STATUS_CHECK"),
 ];
 let message = new Message("Test message with two commands", commands);
-
+message.commands = commands;
 module.exports = Message;
