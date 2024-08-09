@@ -8,23 +8,44 @@ class Rover {
   }
 
   receiveMessage(message) {
-    let obj = {};
-    obj.message = "Test message with two commands";
-    obj.results = [
-      {
-        completed: true,
-      },
-      {
-        completed: true,
-        roverStatus: {
-          mode: "LOW_POWER",
-          generatorWatts: 110,
-          position: 98382,
-        },
-      },
-    ];
+    let results = [];
 
-    return obj;
+    for (let command of message.commands) {
+      if (command.commandType === "MOVE") {
+        if (this.mode === "LOW_POWER") {
+          results.push({ completed: false });
+        } else {
+          this.position = command.value;
+          results.push({ completed: true });
+        }
+      } else if (command.commandType === "STATUS_CHECK") {
+        results.push({
+          completed: true,
+          roverStatus: {
+            mode: this.mode,
+            position: this.position,
+            generatorWatts: this.generatorWatts,
+          },
+        });
+      } else if (command.commandType === "MODE_CHANGE") {
+        this.mode = command.value;
+        results.push({
+          completed: true,
+          roverStatus: {
+            mode: this.mode,
+            position: this.position,
+            generatorWatts: this.generatorWatts,
+          },
+        });
+      } else {
+        results.push({ completed: false });
+      }
+    }
+
+    return {
+      message: message.name,
+      results: results,
+    };
   }
 
   roverStatus(response) {

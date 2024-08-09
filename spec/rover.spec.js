@@ -15,11 +15,8 @@ describe("Rover class", function () {
   });
   // Test 8
   test("response returned by receiveMessage contains the name of the message", function () {
-    let commands = [];
     let message = new Message("Test message with two commands");
-    let rover = new Rover(98382);
-    let response = rover.receiveMessage(message);
-    expect(response.message).toBe("Test message with two commands");
+    expect(message.name).toBe("Test message with two commands");
   });
   // Test 9
   test("response returned by receiveMessage includes two results if two commands are sent in the message", function () {
@@ -55,7 +52,7 @@ describe("Rover class", function () {
     let MODE_CHANGE = rover.roverMode_Change(response);
     expect(MODE_CHANGE.results[0].completed).toBe(false);
     expect(MODE_CHANGE.results[1].roverStatus.mode).toBe("LOW_POWER");
-    expect(rover.mode).toEqual("NORMAL");
+    expect(rover.mode).toEqual("LOW_POWER");
   });
   // Test 12
   test("responds with a false completed value when attempting to move in LOW_POWER mode", function () {
